@@ -1,0 +1,5 @@
+outs:
+- md5: 4354bc6235a0c6e83f93d1c0f840fb30
+  size: 2144797
+  hash: md5
+  path: mtgrules_dump.json
