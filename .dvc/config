@@ -1,0 +1,6 @@
+[core]
+    autostage = true
+    remote = gdrive-sbldev
+['remote "gdrive-sbldev"']
+    url = gdrive://1RfCFi-ZgkCCtBqdWbXmMNmmhsRITTDvG
+    gdrive_client_id = 362605009896-3ao0b6oregga6q7d80db90q25eldo66q.apps.googleusercontent.com
