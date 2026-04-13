@@ -1,3 +1,5 @@
+import re
+import json
 from pathlib import Path
 
 import click
@@ -13,7 +15,9 @@ def prepare_ls_tasks(
         input_dump: Path,
         output_tasks: Path
 ):
-    pass
+    card_regex = re.compile(r'\[\[([^]]+)]]')
+
+
 
 
 if __name__ == '__main__':
