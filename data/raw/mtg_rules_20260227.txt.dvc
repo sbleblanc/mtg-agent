@@ -1,0 +1,5 @@
+outs:
+- md5: 50957244aca3c04ab6d0a5898ce518d7
+  size: 965621
+  hash: md5
+  path: mtg_rules_20260227.txt
