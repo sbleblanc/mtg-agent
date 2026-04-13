@@ -1,0 +1,15 @@
+schema: '2.0'
+stages:
+  convert-md:
+    cmd: uv run preprocess convert-rules-to-md mtg_rules_20260227.txt 
+      mtg_rules_20260227.md
+    deps:
+    - path: mtg_rules_20260227.txt
+      hash: md5
+      md5: 50957244aca3c04ab6d0a5898ce518d7
+      size: 965621
+    outs:
+    - path: mtg_rules_20260227.md
+      hash: md5
+      md5: 0687365ce6d7ce0c849ab8daf4689d42
+      size: 841377

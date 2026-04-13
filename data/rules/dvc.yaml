@@ -1,0 +1,7 @@
+stages:
+  convert-md:
+    cmd: uv run preprocess convert-rules-to-md mtg_rules_20260227.txt mtg_rules_20260227.md
+    deps:
+      - mtg_rules_20260227.txt
+    outs:
+      - mtg_rules_20260227.md
