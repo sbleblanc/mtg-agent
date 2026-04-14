@@ -37,5 +37,5 @@ stages:
     outs:
     - path: mtg_rules_20260227_chunks_questions.json
       hash: md5
-      md5: ebb6bf460e864233d3da0b08942c9a49
-      size: 2343127
+      md5: 242c3b7d71c01e4763446c81ccf3cdb3
+      size: 2008395

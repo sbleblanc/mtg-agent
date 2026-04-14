@@ -135,20 +135,28 @@ def generate_synthetic_rule_questions(num_questions:int, chunks_json: Path, chun
 
     for chunk in tqdm(chunks):
         prompt = f"## {chunk['h2']}\n### {chunk['h3']}\n{chunk['content']}"
+        # Need to find a better way to handle the model not answering in the right format
         try:
             res = agent.run_sync(prompt)
         except Exception as e:
             continue
         # print(res.output)
-        cwq = chunk.copy()
-        cwq['questions'] = [
-            syn_rule.model_dump()
-            for syn_rule in res.output
-        ]
-        chunks_with_questions.append(cwq)
+        chunks_with_questions.append({
+            "id": chunk["id"],
+            "content": prompt,
+            "questions": [
+                syn_rule.model_dump()
+                for syn_rule in res.output
+            ]
+        })
 
     with chunks_with_questions_json.open(mode="w") as f:
         json.dump(chunks_with_questions, f, indent=2)
+
+
+@cli.command()
+def build_rule_retrieval_ds():
+    pass
 
 if __name__ == '__main__':
     cli()
