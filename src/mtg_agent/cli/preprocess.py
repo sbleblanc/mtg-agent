@@ -86,13 +86,14 @@ def chunk_rules(
 
     chunks = [
         {
+            "id": i,
             "h1": chunk.metadata.get("h1", ""),
             "h2": chunk.metadata.get("h2", ""),
             "h3": chunk.metadata.get("h3", ""),
             "h4": chunk.metadata.get("h4", ""),
             "content": chunk.page_content
         }
-        for chunk in rules_splits
+        for i, chunk in enumerate(rules_splits)
     ]
 
     token_counts = np.array([
