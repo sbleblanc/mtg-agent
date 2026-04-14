@@ -26,3 +26,16 @@ stages:
       hash: md5
       md5: a9a6c6b348551ea619c138f4602f0f2c
       size: 1307134
+  generate-sythetic-questions:
+    cmd: uv run preprocess generate-synthetic-rule-questions 
+      mtg_rules_20260227_chunks.json mtg_rules_20260227_chunks_questions.json
+    deps:
+    - path: mtg_rules_20260227_chunks.json
+      hash: md5
+      md5: a9a6c6b348551ea619c138f4602f0f2c
+      size: 1307134
+    outs:
+    - path: mtg_rules_20260227_chunks_questions.json
+      hash: md5
+      md5: ebb6bf460e864233d3da0b08942c9a49
+      size: 2343127

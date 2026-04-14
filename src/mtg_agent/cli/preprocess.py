@@ -3,10 +3,13 @@ import json
 import itertools as it
 from pathlib import Path
 
+from mtg_agent.agents.synthetic import get_synthetic_question_generator_agent, SyntheticRuleQuestion
+
 import click
 import numpy as np
 from transformers import AutoTokenizer
 from langchain_text_splitters import MarkdownHeaderTextSplitter
+from tqdm import tqdm
 
 
 @click.group()
@@ -112,6 +115,40 @@ def chunk_rules(
     with chunks_json.open(mode="w") as f:
         json.dump(chunks, f, indent=2)
 
+
+@cli.command()
+@click.option("-n", "--num-questions", type=int, default=5)
+@click.argument('chunks_json', type=click.Path(path_type=Path))
+@click.argument('chunks_with_questions_json', type=click.Path(path_type=Path))
+def generate_synthetic_rule_questions(num_questions:int, chunks_json: Path, chunks_with_questions_json: Path):
+    # import logfire
+    #
+    # logfire.configure(send_to_logfire='if-token-present')
+    # logfire.instrument_pydantic_ai()
+
+    agent = get_synthetic_question_generator_agent(num_questions=num_questions)
+
+    with chunks_json.open(mode="r") as f:
+        chunks = json.load(f)
+
+    chunks_with_questions = []
+
+    for chunk in tqdm(chunks):
+        prompt = f"## {chunk['h2']}\n### {chunk['h3']}\n{chunk['content']}"
+        try:
+            res = agent.run_sync(prompt)
+        except Exception as e:
+            continue
+        # print(res.output)
+        cwq = chunk.copy()
+        cwq['questions'] = [
+            syn_rule.model_dump()
+            for syn_rule in res.output
+        ]
+        chunks_with_questions.append(cwq)
+
+    with chunks_with_questions_json.open(mode="w") as f:
+        json.dump(chunks_with_questions, f, indent=2)
 
 if __name__ == '__main__':
     cli()

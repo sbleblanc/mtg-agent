@@ -11,3 +11,9 @@ stages:
       - mtg_rules_20260227.md
     outs:
       - mtg_rules_20260227_chunks.json
+  generate-sythetic-questions:
+    cmd: uv run preprocess generate-synthetic-rule-questions mtg_rules_20260227_chunks.json mtg_rules_20260227_chunks_questions.json
+    deps:
+      - mtg_rules_20260227_chunks.json
+    outs:
+      - mtg_rules_20260227_chunks_questions.json
