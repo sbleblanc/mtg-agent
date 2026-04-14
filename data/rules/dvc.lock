@@ -11,5 +11,18 @@ stages:
     outs:
     - path: mtg_rules_20260227.md
       hash: md5
-      md5: 0687365ce6d7ce0c849ab8daf4689d42
-      size: 841377
+      md5: e09a87faa7ad98751e9d54c06d315627
+      size: 842658
+  chunk-md:
+    cmd: uv run preprocess chunk-rules mtg_rules_20260227.md 
+      mtg_rules_20260227_chunks.json
+    deps:
+    - path: mtg_rules_20260227.md
+      hash: md5
+      md5: e09a87faa7ad98751e9d54c06d315627
+      size: 842658
+    outs:
+    - path: mtg_rules_20260227_chunks.json
+      hash: md5
+      md5: f2f0735a992745c9dc19ec36bfe319e6
+      size: 1289716

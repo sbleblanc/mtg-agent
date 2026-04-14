@@ -5,3 +5,9 @@ stages:
       - mtg_rules_20260227.txt
     outs:
       - mtg_rules_20260227.md
+  chunk-md:
+    cmd: uv run preprocess chunk-rules mtg_rules_20260227.md mtg_rules_20260227_chunks.json
+    deps:
+      - mtg_rules_20260227.md
+    outs:
+      - mtg_rules_20260227_chunks.json
