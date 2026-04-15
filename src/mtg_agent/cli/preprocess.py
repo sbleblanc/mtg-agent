@@ -8,9 +8,11 @@ from mtg_agent.agents.synthetic import get_synthetic_question_generator_agent, S
 import click
 import pandas as pd
 import numpy as np
+from tqdm import tqdm
 from transformers import AutoTokenizer
 from langchain_text_splitters import MarkdownHeaderTextSplitter
-from tqdm import tqdm
+from sentence_transformers import SentenceTransformer
+
 
 
 @click.group()
@@ -200,6 +202,34 @@ def build_rule_retrieval_ds(
     test_df.to_csv(output_dir / f"{output_prefix}_{granularity}_test.csv", index=False)
 
 
+@cli.command()
+@click.option("-m", "--model-name", type=str, default="Qwen/Qwen3-Embedding-0.6B")
+@click.option("-d", "--device", type=str, default="cuda:0")
+@click.option("-b", "--batch-size", type=int, default=4)
+@click.option("-s", "--suffix", type=str, default="qwen3_emb_600m")
+@click.argument('dataset_path', type=click.Path(dir_okay=False, path_type=Path))
+def generate_vectors(
+        model_name: str,
+        device: str,
+        batch_size: int,
+        suffix: str,
+        dataset_path: Path,
+):
+    df = pd.read_csv(dataset_path)
+
+    model = SentenceTransformer(model_name, device=device)
+    doc_embeddings = model.encode(
+        df['content'].to_list(),
+        batch_size=batch_size,
+        show_progress_bar=True,
+        device=device
+    )
+
+    np.savez(
+        dataset_path.with_stem(f"{dataset_path.stem}_{suffix}").with_suffix(".npz"),
+        embeddings=doc_embeddings,
+        allow_pickle=False
+    )
 
 
 if __name__ == '__main__':

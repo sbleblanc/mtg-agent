@@ -81,3 +81,29 @@ stages:
       hash: md5
       md5: 1968e0eff6b9d53387b6fcf22317649d
       size: 4147073
+  precompute-embeddings@model0-chunk:
+    cmd: uv run preprocess generate-vectors -m Qwen/Qwen3-Embedding-0.6B 
+      mtg_rules_20260227_chunk_test.csv
+    deps:
+    - path: mtg_rules_20260227_chunk_test.csv
+      hash: md5
+      md5: 238d11c479d9e53141df846b1aa2eb5f
+      size: 1039059
+    outs:
+    - path: mtg_rules_20260227_chunk_test_qwen3_emb_600m.npz
+      hash: md5
+      md5: fc3af96f1d5fadda3eeffa9915299731
+      size: 4710674
+  precompute-embeddings@model0-question:
+    cmd: uv run preprocess generate-vectors -m Qwen/Qwen3-Embedding-0.6B 
+      mtg_rules_20260227_question_test.csv
+    deps:
+    - path: mtg_rules_20260227_question_test.csv
+      hash: md5
+      md5: 079c4df6fd451aea722757d0e01f5cb8
+      size: 1031962
+    outs:
+    - path: mtg_rules_20260227_question_test_qwen3_emb_600m.npz
+      hash: md5
+      md5: 6c3765a906e3d58a1c12c277f1d63036
+      size: 4714770

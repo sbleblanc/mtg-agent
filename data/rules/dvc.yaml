@@ -34,3 +34,14 @@ stages:
       outs:
         - mtg_rules_20260227_${item}_train.csv
         - mtg_rules_20260227_${item}_test.csv
+  precompute-embeddings:
+    matrix:
+      model:
+        - suffix: qwen3_emb_600m
+          model_name: Qwen/Qwen3-Embedding-0.6B
+      granularity: ["chunk", "question"]
+    cmd: uv run preprocess generate-vectors -m ${item.model.model_name} mtg_rules_20260227_${item.granularity}_test.csv
+    deps:
+      - mtg_rules_20260227_${item.granularity}_test.csv
+    outs:
+      - mtg_rules_20260227_${item.granularity}_test_${item.model.suffix}.npz

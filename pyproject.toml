@@ -10,7 +10,6 @@ dependencies = [
     "datasets>=4.8.4",
     "dvc>=3.67.1",
     "dvc-gdrive>=3.0.1",
-    "faiss-cpu>=1.13.2",
     "langchain-text-splitters>=1.1.1",
     "legacy-cgi>=2.6.4",
     "logfire>=4.28.0",
@@ -24,9 +23,18 @@ dependencies = [
     "pyrate-limiter>=4.1.0",
     "sentence-transformers>=5.4.1",
     "setuptools>=82.0.1",
+    "torch>=2.10.0",
     "tqdm>=4.67.3",
     "transformers==5.5.4",
 ]
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[tool.uv.sources]
+torch = {index = "pytorch-cu126"}
 
 [build-system]
 requires = ["uv_build>=0.10.9,<0.11.0"]

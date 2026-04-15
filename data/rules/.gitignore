@@ -6,3 +6,5 @@ mtg_rules_20260227.txt
 /mtg_rules_20260227_chunk_test.csv
 /mtg_rules_20260227_question_train.csv
 /mtg_rules_20260227_question_test.csv
+/mtg_rules_20260227_chunk_test_qwen3_emb_600m.npz
+/mtg_rules_20260227_question_test_qwen3_emb_600m.npz
