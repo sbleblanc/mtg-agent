@@ -6,6 +6,7 @@ from pathlib import Path
 from mtg_agent.agents.synthetic import get_synthetic_question_generator_agent, SyntheticRuleQuestion
 
 import click
+import pandas as pd
 import numpy as np
 from transformers import AutoTokenizer
 from langchain_text_splitters import MarkdownHeaderTextSplitter
@@ -155,8 +156,51 @@ def generate_synthetic_rule_questions(num_questions:int, chunks_json: Path, chun
 
 
 @cli.command()
-def build_rule_retrieval_ds():
-    pass
+@click.option("--seed", type=int, default=42)
+@click.option("--test-ratio", type=float, default=0.2)
+@click.option("--granularity", type=click.Choice(["chunk", "question"]))
+@click.argument('chunks_with_questions_json', type=click.Path(dir_okay=False, path_type=Path))
+@click.argument('output_dir', type=click.Path(file_okay=False, path_type=Path))
+@click.argument('output_prefix', type=str)
+def build_rule_retrieval_ds(
+        seed: int,
+        test_ratio: float,
+        granularity: str,
+        chunks_with_questions_json: Path,
+        output_dir: Path,
+        output_prefix: Path
+):
+
+    with chunks_with_questions_json.open(mode="r") as f:
+        chunks = json.load(f)
+
+    chunks_df = pd.DataFrame(chunks)
+
+    qid_counter = it.count()
+    chunks_df['questions'] = chunks_df['questions'].apply(lambda qs: [{**q, "question_id": next(qid_counter)} for q in qs])
+    chunks_df.rename(columns={"id": "chunk_id"}, inplace=True)
+
+    def explode(df):
+        df = df.explode("questions")
+        df[['rule_number', 'question', 'question_id']] = df['questions'].apply(lambda x: pd.Series(x))
+        return df.drop('questions', axis=1)
+
+    if granularity == "chunk":
+        chunks_df = chunks_df.sample(frac=1.0, random_state=seed)
+        take = int(test_ratio * chunks_df.shape[0])
+        test_df = explode(chunks_df.iloc[:take])
+        train_df = explode(chunks_df.iloc[take:])
+    else:
+        questions_df = explode(chunks_df).sample(frac=1.0, random_state=seed)
+        take = int(test_ratio * questions_df.shape[0])
+        test_df = questions_df.iloc[:take]
+        train_df = questions_df.iloc[take:]
+
+    train_df.to_csv(output_dir / f"{output_prefix}_{granularity}_train.csv", index=False)
+    test_df.to_csv(output_dir / f"{output_prefix}_{granularity}_test.csv", index=False)
+
+
+
 
 if __name__ == '__main__':
     cli()

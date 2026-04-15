@@ -17,3 +17,20 @@ stages:
       - mtg_rules_20260227_chunks.json
     outs:
       - mtg_rules_20260227_chunks_questions.json
+  train-test-split:
+    foreach:
+      - chunk
+      - question
+    do:
+      cmd: >
+        uv run preprocess build-rule-retrieval-ds 
+        --granularity ${item} --test-ratio ${build_rule_retrieval_ds.test_ratio} --seed ${build_rule_retrieval_ds.seed} 
+        mtg_rules_20260227_chunks_questions.json . mtg_rules_20260227
+      params:
+        - build_rule_retrieval_ds.test_ratio
+        - build_rule_retrieval_ds.seed
+      deps:
+        - mtg_rules_20260227_chunks_questions.json
+      outs:
+        - mtg_rules_20260227_${item}_train.csv
+        - mtg_rules_20260227_${item}_test.csv

@@ -39,3 +39,45 @@ stages:
       hash: md5
       md5: 242c3b7d71c01e4763446c81ccf3cdb3
       size: 2008395
+  train-test-split@chunk:
+    cmd: "uv run preprocess build-rule-retrieval-ds  --granularity chunk --test-ratio
+      0.2 --seed 42  mtg_rules_20260227_chunks_questions.json . mtg_rules_20260227\n"
+    deps:
+    - path: mtg_rules_20260227_chunks_questions.json
+      hash: md5
+      md5: 242c3b7d71c01e4763446c81ccf3cdb3
+      size: 2008395
+    params:
+      params.yaml:
+        build_rule_retrieval_ds.seed: 42
+        build_rule_retrieval_ds.test_ratio: 0.2
+    outs:
+    - path: mtg_rules_20260227_chunk_test.csv
+      hash: md5
+      md5: 238d11c479d9e53141df846b1aa2eb5f
+      size: 1039059
+    - path: mtg_rules_20260227_chunk_train.csv
+      hash: md5
+      md5: 623ad4f895e8efa8f175d8c49283ca87
+      size: 4139976
+  train-test-split@question:
+    cmd: "uv run preprocess build-rule-retrieval-ds  --granularity question --test-ratio
+      0.2 --seed 42  mtg_rules_20260227_chunks_questions.json . mtg_rules_20260227\n"
+    deps:
+    - path: mtg_rules_20260227_chunks_questions.json
+      hash: md5
+      md5: 242c3b7d71c01e4763446c81ccf3cdb3
+      size: 2008395
+    params:
+      params.yaml:
+        build_rule_retrieval_ds.seed: 42
+        build_rule_retrieval_ds.test_ratio: 0.2
+    outs:
+    - path: mtg_rules_20260227_question_test.csv
+      hash: md5
+      md5: 079c4df6fd451aea722757d0e01f5cb8
+      size: 1031962
+    - path: mtg_rules_20260227_question_train.csv
+      hash: md5
+      md5: 1968e0eff6b9d53387b6fcf22317649d
+      size: 4147073
